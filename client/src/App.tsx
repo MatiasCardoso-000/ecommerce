@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
 function App() {
   interface Product {
     id: number;
@@ -12,7 +15,7 @@ function App() {
   const [products, setProducts] = useState<Product[]>([]);
 
   const getProducts = async () => {
-    const URL = "http://localhost:3000/products";
+    const URL = `${BACKEND_URL}/products`;
     try {
       const response = await fetch(URL);
       if (!response.ok) {
@@ -40,7 +43,7 @@ function App() {
           const price = (target.elements[2] as HTMLInputElement).value;
           const description = (target.elements[3] as HTMLInputElement).value;
 
-          const res = await fetch("http://localhost:3000/products", {
+          const res = await fetch(`${BACKEND_URL}/products`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
