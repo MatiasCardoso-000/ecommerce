@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { MONGO_URI } from "./config/config";
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost/products";
+
 
 export const connectDB = () => {
   mongoose
