@@ -22,9 +22,9 @@ router.get("/products", async (req: Request, res: Response) => {
 // });
 
 router.post("/products", async (req: Request, res: Response) => {
-  const { title, description, price, category } = req.body;
+  const { title, description, price, category, image, rating } = req.body;
 
-  if (!title || !description || !price || !category) {
+  if (!title || !description || !price || !category || !image || !rating) {
     throw new Error("Title, description,price and category are required.");
   }
 
@@ -34,6 +34,8 @@ router.post("/products", async (req: Request, res: Response) => {
       description,
       price,
       category,
+      image,
+      rating,
     });
 
     res.json(newProduct);
