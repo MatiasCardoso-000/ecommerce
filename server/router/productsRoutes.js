@@ -1,10 +1,9 @@
 import { Router } from "express";
-import Product from "../schemas/productSchema";
-import { type Request, type Response } from "express";
+import Product from "../models/product.model.js";
 
 export const router = Router();
 
-router.get("/products", async (req: Request, res: Response) => {
+router.get("/products", async (req, res) => {
   const products = await Product.find();
 
   res.json(products);
@@ -21,10 +20,10 @@ router.get("/products", async (req: Request, res: Response) => {
 //   res.json(products.products[productId]);
 // });
 
-router.post("/products", async (req: Request, res: Response) => {
-  const { title, description, price, category, image, rating } = req.body;
+router.post("/products", async (req, res) => {
+  const { title, description, price, category, image } = req.body;
 
-  if (!title || !description || !price || !category || !image || !rating) {
+  if (!title || !description || !price || !category || !image) {
     throw new Error("Title, description,price and category are required.");
   }
 
@@ -35,12 +34,11 @@ router.post("/products", async (req: Request, res: Response) => {
       price,
       category,
       image,
-      rating,
     });
 
     res.json(newProduct);
     console.log("producto creado: ", newProduct);
-  } catch (error: any) {
+  } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
