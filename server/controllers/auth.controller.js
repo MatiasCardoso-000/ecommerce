@@ -7,17 +7,23 @@ import { TOKEN_SECRET } from "../config/config.js";
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
 
+  if (!username || !email || !password) {
+    res.status(400).json({
+      message: "Todos los campos son obligatorios",
+    });
+    throw new Error("Todos los campos son obligatorios");
+  }
+
+  const userFound = await User.findOne({ email });
+
+  if (userFound) {
+    return res.status(400).json({ message: "The email is already in use" });
+  }
+
+  const hashPassword = await bcrypt.hash(password, 12);
+
   try {
-    if (!username || !email || !password) {
-      res.status(400).json({
-        message: "Todos los campos son obligatorios",
-      });
-      throw new Error("Todos los campos son obligatorios");
-    }
-
-    const hashPassword = await bcrypt.hash(password, 12);
-
-    const newUser = await User.create({
+    const newUser = new User({
       username,
       email,
       password: hashPassword,
@@ -25,7 +31,7 @@ export const register = async (req, res) => {
 
     const savedUser = await newUser.save();
 
-    const token = await createToken({ id: newUser._id });
+    const token = createToken({ id: savedUser._id });
     res.cookie("token", token);
     res.json(savedUser);
   } catch (error) {
@@ -36,30 +42,29 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
+  const userFound = await User.findOne({ email });
   try {
-    const userFound = await User.findOne({ email });
-
     if (!userFound) {
-      res.status(404).json({ message: "El usuario no existe" });
-      throw new Error("El usuario no existe");
+      res.status(404).json({ message: ["Usuario/Clave incorrectos"] });
+      throw new Error("Usuario/Clave incorrectos");
     }
 
     const comparePassword = await bcrypt.compare(password, userFound.password);
 
     if (!comparePassword) {
       res.status(400).json({
-        message: "Las contraseñas no coinciden",
+        message: ["Usuario/Clave incorrectos"],
       });
-      throw new Error("Las contraseñas no coinciden");
+      throw new Error("Usuario/Clave incorrectos");
     }
 
-    const token = await createToken({ id: userFound._id });
+    const token = createToken({ id: userFound._id });
     res.cookie("token", token);
 
     res.json({
-      _id: userFound.id,
-      email: userFound.email,
+      id: userFound.id,
       username: userFound.username,
+      email: userFound.email,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

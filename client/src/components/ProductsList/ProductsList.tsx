@@ -1,4 +1,4 @@
-import { useProducts } from "./hooks/useProducts";
+import { useProducts } from "../../hooks/useProducts";
 
 export const ProductsList = () => {
   const { randomProducts } = useProducts();
@@ -29,7 +29,6 @@ export const ProductsList = () => {
                   className="w-full md:w-[50px]"
                 />
               </div>
-              <span className="font-semibold ">{product.rating}</span>
               <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 cursor-pointer">
                 Add
               </button>

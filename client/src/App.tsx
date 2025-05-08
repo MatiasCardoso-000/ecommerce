@@ -1,9 +1,11 @@
-import { ProductsList } from "./components/ProductsList";
+interface Params {
+  children: React.ReactNode
+}
 
-function App() {
+function App({children}:Params) {
   return (
     <main className=" min-h-screen items-center justify-center">
-        <ProductsList/>
+      {children}
     </main>
   );
 }

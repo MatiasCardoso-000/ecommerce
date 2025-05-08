@@ -9,12 +9,14 @@ export const registerSchema = zod.object({
     .email("El email es invalido"),
   password: zod
     .string({ required_error: "Debe ingresar una contraseña" })
-    .min(6, "La contraseña debe ser al menos de 6 caracteres"),
+    .min(6, { message: "La contraseña debe ser al menos de 6 caracteres" }),
 });
 
 export const loginSchema = zod.object({
-  email: zod.string({ required_error: "Ingrese un email válido" }).email("El email es invalido"),
+  email: zod
+    .string({ required_error: "Ingrese un email válido" })
+    .email({ message: "El email es invalido" }),
   password: zod
     .string({ required_error: "Debe ingresar una contraseña" })
-    .min(6, "La contraseña debe ser al menos de 6 caracteres"),
+    .min(6, { message: "La contraseña debe ser al menos de 6 caracteres" }),
 });

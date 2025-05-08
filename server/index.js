@@ -7,12 +7,15 @@ import { connectDB } from "./db.js";
 import cookieParser from "cookie-parser";
 
 app.use(express.json());
-app.use(cookieParser())
-app.use(cors(
-  'http://localhost:5173'
-));
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 connectDB();
 
-app.use("/", productsRouter);
+app.use("/api", productsRouter);
 app.use("/auth", userRouter);
